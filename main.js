@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
-
+const { ipcMain } = require('electron')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -16,12 +16,18 @@ function createWindow () {
   })
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
-  mainWindow.on("minimize", function(){
-    mainWindow.hide()
-    })
+/*  mainWindow.on("minimize", function(){
+    })*/
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
-
+    ipcMain.on("hide-event", function(event, arg){
+        if(arg === "hide"){
+            mainWindow.hide()
+        }
+    })
+    ipcMain.on("ping-message", (event,arg) => {
+      console.log(arg)
+    })
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
